@@ -1,3 +1,4 @@
+import 'package:code_todo/app/pages/login/login_page.dart';
 import 'package:code_todo/app/pages/registration/registration_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,5 +36,5 @@ enum Kpages {
 Map<String, WidgetBuilder> routes = {
   Kpages.home.route: (_) => const Placeholder(),
   Kpages.registration.route: (_) => const RegistrationPage(),
-  Kpages.login.route: (_) => const Placeholder(),
+  Kpages.login.route: (_) => const LoginPage(),
 };

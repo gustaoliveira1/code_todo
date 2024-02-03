@@ -78,6 +78,20 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
                   labelText: 'Confirmar Senha',
                 ),
               ),
+              const SizedBox(height: kDefaultMarginSmall),
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                GestureDetector(
+                    child: const Text(
+                      "Já tenho uma conta",
+                      style: TextStyle(
+                          color: Colors.blueAccent,
+                          decoration: TextDecoration.underline),
+                    ),
+                    onTap: () {
+                      navigatorKey.currentState
+                          ?.pushReplacementNamed(Kpages.login.route);
+                    }),
+              ]),
               const SizedBox(height: kDefaultMarginLarge),
               ElevatedButton(
                 onPressed: userLoginNotifier.state.name != null &&
