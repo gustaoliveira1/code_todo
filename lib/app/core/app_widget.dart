@@ -14,7 +14,7 @@ class App extends ConsumerWidget {
     return MaterialApp(
       routes: routes,
       navigatorKey: navigatorKey,
-      theme: ThemeData(primarySwatch: Colors.deepPurple),
+      theme: ThemeData(primarySwatch: Colors.deepPurple, useMaterial3: false),
       initialRoute: hasLoggin ? Kpages.home.route : Kpages.registration.route,
     );
   }
