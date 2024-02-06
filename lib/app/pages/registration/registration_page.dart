@@ -80,17 +80,18 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
               ),
               const SizedBox(height: kDefaultMarginSmall),
               Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                GestureDetector(
-                    child: const Text(
-                      "Já tenho uma conta",
-                      style: TextStyle(
-                          color: Colors.blueAccent,
-                          decoration: TextDecoration.underline),
-                    ),
-                    onTap: () {
-                      navigatorKey.currentState
-                          ?.pushReplacementNamed(Kpages.login.route);
-                    }),
+                InkWell(
+                  onTap: () {
+                    kNavigatorKey.currentState
+                        ?.pushReplacementNamed(Kpages.login.route);
+                  },
+                  child: Text(
+                    "Já tenho uma conta",
+                    style: TextStyle(
+                        color: Theme.of(context).highlightColor,
+                        decoration: TextDecoration.underline),
+                  ),
+                ),
               ]),
               const SizedBox(height: kDefaultMarginLarge),
               ElevatedButton(
@@ -129,7 +130,8 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
     users.add(user.toJson());
     await database.setStringList(Keys.mockUserList.name, users);
 
-    navigatorKey.currentState?.pushReplacementNamed(Kpages.login.route);
+    kNavigatorKey.currentState?.pushReplacementNamed(Kpages.login.route);
+    ref.invalidate(userLoginProvider);
     return;
   }
 }

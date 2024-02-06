@@ -18,6 +18,7 @@ class _LoginPageState extends ConsumerState<ConsumerStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     final userLoginNotifier = ref.watch(userLoginProvider.notifier);
+    final userLogin = ref.watch(userLoginProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text("Login")),
@@ -32,41 +33,37 @@ class _LoginPageState extends ConsumerState<ConsumerStatefulWidget> {
               TextFormField(
                 decoration: const InputDecoration(label: Text("Nome")),
                 onChanged: (value) => userLoginNotifier.update((state) {
-                  _handleLoginButtonState(state);
+                  // _handleLoginButtonState(state);
                   return state.copyWith(name: value);
                 }),
               ),
-              const SizedBox(
-                height: kDefaultMarginLarge,
-              ),
+              const SizedBox(height: kDefaultMarginLarge),
               TextFormField(
                 decoration: const InputDecoration(label: Text("Senha")),
                 onChanged: (value) => userLoginNotifier.update((state) {
-                  _handleLoginButtonState(state);
+                  // _handleLoginButtonState(state);
                   return state.copyWith(password: value);
                 }),
               ),
-              const SizedBox(
-                height: kDefaultMarginSmall,
-              ),
+              const SizedBox(height: kDefaultMarginSmall),
               Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                GestureDetector(
-                    child: const Text(
+                InkWell(
+                    child: Text(
                       "Ainda não tenho uma conta",
                       style: TextStyle(
-                          color: Colors.blueAccent,
-                          decoration: TextDecoration.underline),
+                        color: Theme.of(context).highlightColor,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
                     onTap: () {
-                      navigatorKey.currentState
+                      kNavigatorKey.currentState
                           ?.pushReplacementNamed(Kpages.registration.route);
                     }),
               ]),
-              const SizedBox(
-                height: kDefaultMarginLarge,
-              ),
+              const SizedBox(height: kDefaultMarginLarge),
               ElevatedButton(
-                  onPressed: enableLoginButton
+                  onPressed: (userLogin.name ?? '').isNotEmpty &&
+                          (userLogin.password ?? '').isNotEmpty
                       ? () => _confirmLoginMethod(userLoginNotifier.state, ref)
                       : null,
                   child: const Text("Entrar")),
@@ -79,30 +76,31 @@ class _LoginPageState extends ConsumerState<ConsumerStatefulWidget> {
 
   Future<void> _confirmLoginMethod(UserModel user, WidgetRef ref) async {
     // TODO - get to backend
-    final database = ref.watch(databaseProvider);
+    try {
+      final database = ref.watch(databaseProvider);
 
-    final usersJsonString =
-        database.getStringList(Keys.mockUserList.name) ?? [];
-    final users = usersJsonString.map((usr) => UserModel.fromJson(usr));
+      final usersJsonString = database.getStringList(
+            Keys.mockUserList.name,
+          ) ??
+          [];
+      final users =
+          usersJsonString.map((usr) => UserModel.fromJson(usr)).toList();
 
-    for (var usr in users) {
-      if (usr.name == user.name && usr.password == user.password) {
-        await database.setBool(Keys.hasLoggin.name, true);
-        navigatorKey.currentState?.pushReplacementNamed(Kpages.home.route);
-        return;
-      }
+      users.firstWhere(
+        (e) => e.name == user.name && e.password == user.password,
+        orElse: () => throw Exception('not found'),
+      );
+
+      await database.setBool(Keys.hasLoggin.name, true);
+
+      kNavigatorKey.currentState?.pushReplacementNamed(Kpages.home.route);
+    } catch (e) {
+      debugPrint('[_confirmLoginMethod]>> error on $e');
+      const snackBar = SnackBar(
+        content: Text("Nome e/ou senha estão incorretos"),
+      );
+
+      kSnackBarKey.currentState?.showSnackBar(snackBar);
     }
-
-    const snackBar = SnackBar(
-      content: Text("Nome e/ou senha estão incorretos"),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  void _handleLoginButtonState(UserModel user) {
-    setState(() {
-      enableLoginButton = user.name != null && user.password != null;
-    });
   }
 }

@@ -13,8 +13,14 @@ class App extends ConsumerWidget {
 
     return MaterialApp(
       routes: routes,
-      navigatorKey: navigatorKey,
-      theme: ThemeData(primarySwatch: Colors.deepPurple, useMaterial3: false),
+      debugShowCheckedModeBanner: false,
+      navigatorKey: kNavigatorKey,
+      scaffoldMessengerKey: kSnackBarKey,
+      theme: ThemeData(
+        highlightColor: Colors.deepOrangeAccent,
+        primarySwatch: Colors.deepPurple,
+        useMaterial3: false,
+      ),
       initialRoute: hasLoggin ? Kpages.home.route : Kpages.registration.route,
     );
   }

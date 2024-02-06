@@ -1,8 +1,10 @@
-import 'package:code_todo/app/core/app_widget.dart';
-import 'package:code_todo/app/core/constants.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:code_todo/app/core/app_widget.dart';
+import 'package:code_todo/app/core/constants.dart';
 
 //3.16.9
 
@@ -11,8 +13,8 @@ class LoadingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const Scaffold(
+    return const MaterialApp(
+      home: Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
         ),

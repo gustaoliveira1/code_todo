@@ -1,3 +1,4 @@
+import 'package:code_todo/app/pages/home/home_page.dart';
 import 'package:code_todo/app/pages/login/login_page.dart';
 import 'package:code_todo/app/pages/registration/registration_page.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,8 @@ final databaseProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError();
 });
 
-GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+final kNavigatorKey = GlobalKey<NavigatorState>();
+final kSnackBarKey = GlobalKey<ScaffoldMessengerState>();
 
 enum Keys {
   hasLoggin,
@@ -30,11 +32,11 @@ enum Kpages {
   login;
 
   const Kpages();
-  String get route => '/$name';
+  String get route => '/$name/';
 }
 
 Map<String, WidgetBuilder> routes = {
-  Kpages.home.route: (_) => const Placeholder(),
+  Kpages.home.route: (_) => const HomePage(),
   Kpages.registration.route: (_) => const RegistrationPage(),
   Kpages.login.route: (_) => const LoginPage(),
 };
